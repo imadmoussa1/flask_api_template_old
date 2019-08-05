@@ -24,7 +24,7 @@ services:
   main-data-store:
     image: mongo:4.0.2
     hostname: main-data-store
-    command: --replSet "blogs-replica-set"
+    # command: --replSet "blogs-replica-set"
     ports:
       - "27017:27017"
     secrets:
