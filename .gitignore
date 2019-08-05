@@ -1,3 +1,13 @@
+# ignore secrets directory
+secrets/*.txt
+secrets/*.pem
+secrets/*.crt
+
+# ignore configs directory
+configs/*.env
+configs/*.toml
+!configs/global.env
+
 # ignore Pycharm files
 .idea/
 
