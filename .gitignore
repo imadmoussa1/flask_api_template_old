@@ -6,7 +6,7 @@ secrets/*.crt
 # ignore configs directory
 configs/*.env
 configs/*.toml
-!configs/global.env
+configs/global.env
 
 # ignore Pycharm files
 .idea/
