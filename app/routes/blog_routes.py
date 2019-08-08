@@ -1,17 +1,38 @@
-import os
-from app.api import datetime, log, parser, Resource, jsonify
-import requests
-import json
+from app.api import db, log, parser, Resource, jsonify, request
+from flask_jwt_extended import (JWTManager, create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
 
 from ..models.blog import Blog
-from ..schema.blog_schema import blogs_schema, blog_schema
+from ..models.user import User
+from ..schema.blog_schema import blog_schema
 
 # from ..plot import Plot
 
 parser.add_argument('title')
 
+
 class BlogApi(Resource):
-  def get(self):
-    blog = Blog.query.filter(Blog.active == True)
-    result = blog_schema.dump(blog)
-    return jsonify(result.data)
+    @jwt_required
+    def get(self, blog_id):
+        user_name = get_jwt_identity()
+        user = User.query.filter(User.user_name == user_name).first()
+        blog = Blog.query.filter(Blog.id == blog_id, Blog.user == user).first()
+        result = blog_schema.dump(blog)
+        return jsonify(result.data)
+
+    @jwt_required
+    def post(self):
+        request_json = request.get_json()
+        title = request_json.get("title")
+        description = request_json.get("description")
+        content = request_json.get("content")
+        user_name = get_jwt_identity()
+        user = User.query.filter(User.user_name == user_name).first()
+        blog = Blog.query.filter(Blog.title == title, Blog.user == user).first()
+        if not blog:
+            blog = Blog(title=title, description=description, content=content, active=True, user=user)
+            db.session.add(blog)
+            db.session.commit()
+            result = blog_schema.dump(blog)
+            return jsonify(result.data)
+        else:
+            return {"message": "Blog exist"}, 401

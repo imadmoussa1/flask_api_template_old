@@ -57,15 +57,15 @@ def auth_required(f):
         if auth:
             current_user = User.find_by_username(auth.username)
             if not current_user:
-                return {"message": "Could not verify your login! User {} doesn\"t exist".format(auth.username)}, 401
-            if not current_user.isAdmin:
-                return {"message": "User not allowed! User {} not admin.".format(auth.username)}, 401
+                return {"message": "User {} doesn\"t exist".format(auth.username)}, 401
+            if not current_user.is_admin:
+                return {"message": "User {} not admin.".format(auth.username)}, 401
             if User.verify_hash(auth.password, current_user.password):
                 access_token = create_access_token(identity=auth.username)
                 refresh_token = create_refresh_token(identity=auth.password)
-                return {"message": "Logged in as {}".format(current_user.userName), "access_token": access_token, "refresh_token": refresh_token}, 200
+                return {"message": "Logged in as {}".format(current_user.user_name), "access_token": access_token, "refresh_token": refresh_token}, 200
             else:
-                return {"message": "Could not verify your login! Wrong credentials"}, 401
+                return {"message": "Wrong credentials"}, 401
         return {"message": "Could not verify your login!"}, 401, {"WWW-Authenticate": "Basic realm=\"Login required\""}
 
     return decorated
@@ -103,7 +103,6 @@ def create_app():
         DEBUG=config_env.debug(),
         PROPAGATE_EXCEPTIONS=True
     )
-
     cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
     # cors = CORS(app, supports_credentials=True)
 
@@ -122,6 +121,7 @@ def create_app():
     # command.upgrade(alembic_cfg, "head")
 
     from .routes.blog_routes import BlogApi
+    api.add_resource(BlogApi, '/api/blog/<blog_id>')
     api.add_resource(BlogApi, '/api/blog')
 
     from .routes.blog_list_routes import BlogListApi
@@ -129,6 +129,9 @@ def create_app():
 
     from .routes.user_routes import UserLogin
     api.add_resource(UserLogin, '/api/login')
+
+    from .routes.user_routes import UserRegister
+    api.add_resource(UserRegister, '/api/register')
 
     from .routes.user_routes import UserTokenRefresh
     api.add_resource(UserTokenRefresh, '/api/token_refresh')
@@ -139,7 +142,7 @@ def create_app():
     from .routes.user_routes import UserLogoutAccess
     api.add_resource(UserLogoutAccess, '/api/logout_access')
 
-    # api.init_app(app)
+
     api.init_app(app=app, authorizations=authorizations, security=security, version="0.0.1", description="REST Template")
 
     return app

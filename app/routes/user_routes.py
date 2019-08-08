@@ -13,15 +13,21 @@ class UserLogin(Resource):
 
 
 class UserRegister(Resource):
-    @auth_required
     def post(self):
         try:
             request_json = request.get_json()
-            user = User(user_name=request_json['user_name'], email=request_json['email'], password=str(sha256.hash(request_json['password'])), is_admin=True)
-            db.session.add(user)
-            db.session.commit()
-            log.info("Adding new user")
-            return {"message": "Registered"}, 200
+            email = request_json.get('email')
+            user_name = request_json.get('user_name')
+            password = str(sha256.hash(request_json.get('password')))
+            user = User.query.filter(User.email == email).first()
+            if not user:
+                user = User(user_name= user_name, email=email, password=password, is_admin=True)
+                db.session.add(user)
+                db.session.commit()
+                log.info("Adding new user")
+                return {"message": "Registered"}, 200
+            else:
+                return {"message": "User exist"}, 401
         except:
             return {"message": "Something went wrong"}, 500
 
