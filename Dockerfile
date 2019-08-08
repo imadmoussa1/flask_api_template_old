@@ -1,14 +1,20 @@
-# This template relies on the Python gRPC Docker image below
-FROM python:3
+# This template relies on the Python 3 alpine Docker image below
+FROM python:3-alpine
 
+# Create the application folder
 RUN mkdir -p /var/app
 WORKDIR /var/app
 
+# Copy the requirements will be using
 COPY requirements.txt /var/app
-RUN pip install --no-cache-dir -r requirements.txt
-
+# Install the libraries
+RUN apk add --no-cache postgresql-libs && \
+    apk add --no-cache --virtual .build-deps libffi-dev gcc musl-dev postgresql-dev && \
+    python3 -m pip install -r requirements.txt --no-cache-dir && \
+    apk --purge del .build-deps
+# Copy the code of the app
 COPY . /var/app
 
-# Compile protobuf files
+# Run the flask server
 ENV FLASK_APP=main.py
 CMD flask run -h 0.0.0.0 -p 5000
