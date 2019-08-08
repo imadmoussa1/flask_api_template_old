@@ -1,11 +1,12 @@
 import os
-from app.api import datetime, log, parser, resource
-import json
+
+
+from app.api import datetime, log, parser, Resource, jsonify
 from ..schema.blog_schema import blogs_schema
 from ..models.blog import Blog
 
-class BlogListApi(resource):
+class BlogListApi(Resource):
   def get(self):
-    blogs = blog.query.filter(blog.active == True)
+    blogs = Blog.query.filter(Blog.active == True)
     result = blogs_schema.dump(blogs)
     return jsonify(result.data)

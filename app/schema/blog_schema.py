@@ -2,8 +2,8 @@ from app.api import ma
 
 
 class BlogSchema(ma.Schema):
-  class Meta:
-    fields = ('id', 'tile', 'description', 'content')
+    class Meta:
+        fields = ('id', 'tile', 'description', 'content')
 
 
 blog_schema = BlogSchema()

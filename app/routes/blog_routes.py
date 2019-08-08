@@ -1,5 +1,5 @@
 import os
-from app.api import datetime, log, parser, resource
+from app.api import datetime, log, parser, Resource, jsonify
 import requests
 import json
 
@@ -10,8 +10,8 @@ from ..schema.blog_schema import blogs_schema, blog_schema
 
 parser.add_argument('title')
 
-class BlogApi(resource):
+class BlogApi(Resource):
   def get(self):
-    blog = blog.query.filter(blog.active == True)
+    blog = Blog.query.filter(Blog.active == True)
     result = blog_schema.dump(blog)
     return jsonify(result.data)
