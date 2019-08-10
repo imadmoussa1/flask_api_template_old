@@ -3,7 +3,7 @@ from flask_jwt_extended import (JWTManager, create_access_token, create_refresh_
 
 from ..models.blog import Blog
 from ..models.user import User
-from ..schema.blog_schema import blog_schema
+from ..schema.blog_draft_schema import blog_draft_schema
 
 
 parser.add_argument('title')
@@ -12,8 +12,8 @@ parser.add_argument('title')
 class BlogDraftApi(Resource):
     @jwt_required
     def get(self, title):
-        blog = DataStoreClient.blog_drafts_collection().find_one({"title": title})
-        result = blog_schema.dump(blog)
+        blog = DataStoreClient.blog_drafts_collection().find_one({"title": title}, {'_id': False})
+        result = blog_draft_schema.dump(blog)
         return jsonify(result.data)
 
     @jwt_required
@@ -25,10 +25,9 @@ class BlogDraftApi(Resource):
         user_name = get_jwt_identity()
         blog_json = {"title": title, "description": description, "content": content, "user": user_name}
         try:
-            blog = DataStoreClient.blog_drafts_collection().update_one(
-                {'title': blog_json['title']}, {"$set": blog_json}, upsert=True)
+            DataStoreClient.blog_drafts_collection().update_one({'title': blog_json['title']}, {"$set": blog_json}, upsert=True)
             log.info("New draft blog added by %s" % user_name)
         except Exception as e:
             log.error(e)
-        result = blog_schema.dump(blog)
+        result = blog_draft_schema.dump(blog_json)
         return jsonify(result.data)

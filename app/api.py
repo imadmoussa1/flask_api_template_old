@@ -116,7 +116,8 @@ def create_app():
 
     db.create_all(app=app)
     db.session.commit()
-
+    # Create index in mongodb collection
+    DataStoreClient.create_index()
     # import alembic.config
     # from alembic import command
     # alembic_cfg = alembic.config.Config("alembic.ini")

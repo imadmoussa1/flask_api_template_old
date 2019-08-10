@@ -1,3 +1,4 @@
+import pymongo
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 
@@ -36,6 +37,6 @@ class DataStoreClient:
 
     @staticmethod
     def create_index():
-        index_name = 'hash_index'
-        if index_name not in DataStoreClient.blog_drafts_collection_name().index_information():
-            return DataStoreClient.blog_drafts_collection_name().createIndex([('title', pymongo.TEXT)], name=index_name, default_language='english')
+        index_name = 'title_index'
+        if index_name not in DataStoreClient.blog_drafts_collection().index_information():
+            return DataStoreClient.blog_drafts_collection().create_index([('title', pymongo.TEXT)], name=index_name, default_language='english')
