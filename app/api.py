@@ -15,10 +15,12 @@ from passlib.hash import pbkdf2_sha256
 
 from .config import Config
 from .logger import Logger
+from .data_store_client import DataStoreClient
 
 sha256 = pbkdf2_sha256
 request = request
 log = Logger.log(__name__)
+DataStoreClient = DataStoreClient
 config_env = Config()
 datetime = datetime
 Resource = Resource
@@ -127,6 +129,10 @@ def create_app():
     from .routes.blog_list_routes import BlogListApi
     api.add_resource(BlogListApi, '/api/blogs')
 
+    from .routes.blog_draft_routes import BlogDraftApi
+    api.add_resource(BlogDraftApi, '/api/drafts/<title>')
+    api.add_resource(BlogDraftApi, '/api/drafts')
+
     from .routes.user_routes import UserLogin
     api.add_resource(UserLogin, '/api/login')
 
@@ -142,7 +148,7 @@ def create_app():
     from .routes.user_routes import UserLogoutAccess
     api.add_resource(UserLogoutAccess, '/api/logout_access')
 
-
     api.init_app(app=app, authorizations=authorizations, security=security, version="0.0.1", description="REST Template")
+    jwt._set_error_handler_callbacks(api)
 
     return app

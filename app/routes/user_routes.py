@@ -21,7 +21,7 @@ class UserRegister(Resource):
             password = str(sha256.hash(request_json.get('password')))
             user = User.query.filter(User.email == email).first()
             if not user:
-                user = User(user_name= user_name, email=email, password=password, is_admin=True)
+                user = User(user_name=user_name, email=email, password=password, is_admin=True)
                 db.session.add(user)
                 db.session.commit()
                 log.info("Adding new user")

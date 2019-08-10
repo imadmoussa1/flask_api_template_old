@@ -1,5 +1,4 @@
 from app.api import db, datetime
-from sqlalchemy_utils import IPAddressType
 
 
 class Blog(db.Model):
@@ -9,7 +8,6 @@ class Blog(db.Model):
     title = db.Column(db.String(240), unique=True, nullable=False)
     description = db.Column(db.String(240), nullable=False)
     content = db.Column(db.String, nullable=False)
-    # ip_address = db.Column(IPAddressType)
     active = db.Column(db.Boolean)
     created_at = db.Column(db.DateTime, nullable=True)
     updated_at = db.Column(db.DateTime, nullable=True)

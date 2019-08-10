@@ -71,13 +71,13 @@ class Config(object):
         return Config._database_service_port
 
     @staticmethod
-    def blogs_database_name():
+    def blog_database_name():
         if Config._blog_database_name is None:
             Config._blog_database_name = os.getenv('BLOG_DATABASE_NAME', 'blog_data')
         return Config._blog_database_name
 
     @staticmethod
-    def score_collection_name():
+    def blog_drafts_collection_name():
         if Config._blog_drafts_collection_name is None:
             Config._blog_drafts_collection_name = os.getenv('BLOG_DRAFTS_COLLECTION_NAME', 'blog_drafts')
         return Config._blog_drafts_collection_name

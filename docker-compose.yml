@@ -22,7 +22,7 @@ services:
       - db
 
   main-data-store:
-    image: mongo:4.0.2
+    image: mongo
     hostname: main-data-store
     ports:
       - "27017:27017"

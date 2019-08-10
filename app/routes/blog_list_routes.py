@@ -1,4 +1,5 @@
 from flask_jwt_extended import (JWTManager, create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
+
 from app.api import Resource, jsonify
 from ..schema.blog_schema import blogs_schema
 from ..models.blog import Blog

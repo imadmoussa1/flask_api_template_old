@@ -25,14 +25,14 @@ class DataStoreClient:
             return False
 
     @staticmethod
-    def blogs_database():
-        if DataStoreClient._blogs_database is None:
-            DataStoreClient._blogs_database = DataStoreClient.mongo_client()[Config.blogs_database_name()]
-        return DataStoreClient._blogs_database
+    def blog_database():
+        if DataStoreClient._blog_database is None:
+            DataStoreClient._blog_database = DataStoreClient.mongo_client()[Config.blog_database_name()]
+        return DataStoreClient._blog_database
 
     @staticmethod
-    def blog_drafts_collection_name():
-        return DataStoreClient._blog_database()[Config.blog_drafts_collection_name()]
+    def blog_drafts_collection():
+        return DataStoreClient.blog_database()[Config.blog_drafts_collection_name()]
 
     @staticmethod
     def create_index():

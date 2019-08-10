@@ -1,4 +1,4 @@
-from app.api import db, bcrypt, datetime, sha256, jsonify
+from app.api import db, datetime, sha256
 
 
 class User(db.Model):

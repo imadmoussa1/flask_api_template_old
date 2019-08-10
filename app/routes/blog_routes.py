@@ -5,7 +5,6 @@ from ..models.blog import Blog
 from ..models.user import User
 from ..schema.blog_schema import blog_schema
 
-# from ..plot import Plot
 
 parser.add_argument('title')
 
@@ -13,9 +12,7 @@ parser.add_argument('title')
 class BlogApi(Resource):
     @jwt_required
     def get(self, blog_id):
-        user_name = get_jwt_identity()
-        user = User.query.filter(User.user_name == user_name).first()
-        blog = Blog.query.filter(Blog.id == blog_id, Blog.user == user).first()
+        blog = Blog.query.filter(Blog.id == blog_id).first()
         result = blog_schema.dump(blog)
         return jsonify(result.data)
 
@@ -32,6 +29,26 @@ class BlogApi(Resource):
             blog = Blog(title=title, description=description, content=content, active=True, user=user)
             db.session.add(blog)
             db.session.commit()
+            log.info("New blog added by %s" % user_name)
+            result = blog_schema.dump(blog)
+            return jsonify(result.data)
+        else:
+            return {"message": "Blog exist"}, 401
+
+    @jwt_required
+    def put(self, blog_id):
+        request_json = request.get_json()
+        title = request_json.get("title")
+        description = request_json.get("description")
+        content = request_json.get("content")
+        blog = Blog.query.filter(Blog.id == blog_id).first()
+        if not blog:
+            blog.title = title
+            blog.description = description
+            blog.content = content
+            db.session.add(blog)
+            db.session.commit()
+            log.info("Blog %s updated by %s" %(title, user_name))
             result = blog_schema.dump(blog)
             return jsonify(result.data)
         else:
