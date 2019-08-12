@@ -15,4 +15,7 @@ RUN apk add --no-cache postgresql-libs && \
 
 # Run the flask server
 ENV FLASK_APP=main.py
-CMD flask run -h 0.0.0.0 -p 5000
+# Run the dev env
+# CMD flask run -h 0.0.0.0 -p 5000
+# Run using uwsgi
+CMD ["uwsgi", "--ini", "uwsgi.ini"]
