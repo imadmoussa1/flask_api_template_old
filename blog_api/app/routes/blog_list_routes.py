@@ -12,4 +12,4 @@ class BlogListApi(Resource):
         user = User.query.filter(User.user_name == user_name).first()
         blogs = Blog.query.filter(Blog.active == True, Blog.user == user)
         result = blogs_schema.dump(blogs)
-        return jsonify(result.data)
+        return jsonify(result)
