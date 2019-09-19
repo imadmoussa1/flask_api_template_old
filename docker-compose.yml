@@ -1,6 +1,18 @@
 version: '3.3'
 
 services:
+  # add nginx service
+  nginx:
+    image: nginx:alpine
+    depends_on:
+      - flask-template
+    ports:
+      - "80:80"
+    networks:
+      - db
+    volumes:
+      - ./data/nginx:/etc/nginx/conf.d
+
   flask-template:
     # this is used for development only, use the tagged registry image instead
     image: imadmoussa1/flask-api-uwsgi
