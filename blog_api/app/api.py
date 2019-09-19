@@ -13,9 +13,9 @@ from flask_jwt_extended import exceptions as jwt_extended_exceptions
 from flask_marshmallow import Marshmallow
 from passlib.hash import pbkdf2_sha256
 
-from .config import Config
-from .logger import Logger
-from .data_store_client import DataStoreClient
+from app.utils.config import Config
+from app.utils.logger import Logger
+from app.utils.data_store_client import DataStoreClient
 
 sha256 = pbkdf2_sha256
 request = request

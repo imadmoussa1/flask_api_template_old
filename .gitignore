@@ -1,3 +1,5 @@
+# cerbot keys
+data/certbot/*
 # ignore secrets directory
 secrets/*.txt
 secrets/*.pem
