@@ -8,10 +8,20 @@ services:
       - flask-template
     ports:
       - "80:80"
+      - "443:443"
     networks:
       - db
     volumes:
       - ./data/nginx:/etc/nginx/conf.d
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+
+  # Cerbot service to shh connection
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
 
   flask-template:
     # this is used for development only, use the tagged registry image instead
