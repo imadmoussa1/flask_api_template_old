@@ -21,7 +21,7 @@ services:
     networks:
       - db
     volumes:
-      - ./app:/var/app
+      - ./blog_api:/var/app
 
   main-data-store:
     image: mongo
