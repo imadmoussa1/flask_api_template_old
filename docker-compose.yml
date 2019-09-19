@@ -3,7 +3,7 @@ version: '3.3'
 services:
   flask-template:
     # this is used for development only, use the tagged registry image instead
-    image: imadmoussa1/flask-api
+    image: imadmoussa1/flask-api-uwsgi
     ports:
       - "5000:5000"
     depends_on:
