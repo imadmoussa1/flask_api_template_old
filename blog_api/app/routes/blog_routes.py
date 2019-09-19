@@ -14,7 +14,7 @@ class BlogApi(Resource):
     def get(self, blog_id):
         blog = Blog.query.filter(Blog.id == blog_id).first()
         result = blog_schema.dump(blog)
-        return jsonify(result.data)
+        return jsonify(result)
 
     @jwt_required
     def post(self):
@@ -31,7 +31,7 @@ class BlogApi(Resource):
             db.session.commit()
             log.info("New blog added by %s" % user_name)
             result = blog_schema.dump(blog)
-            return jsonify(result.data)
+            return jsonify(result)
         else:
             return {"message": "Blog exist"}, 401
 
@@ -50,6 +50,6 @@ class BlogApi(Resource):
             db.session.commit()
             log.info("Blog %s updated by %s" %(title, user_name))
             result = blog_schema.dump(blog)
-            return jsonify(result.data)
+            return jsonify(result)
         else:
             return {"message": "Blog exist"}, 401
